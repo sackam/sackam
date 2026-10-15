@@ -1,0 +1,36 @@
+# SACKAM WORKS
+
+www.sackam.net 用の静的ポートフォリオ。公開ディレクトリは `dist/`。
+
+## 公開
+
+Webサーバーのドキュメントルートをこのプロジェクトの `dist/` に指定します。ビルドやパッケージのインストールは不要です。
+
+## ローカル確認
+
+```sh
+python3 -m http.server 8080 --directory dist
+```
+
+http://localhost:8080/ を開きます。
+
+## 編集
+
+- `dist/index.html`: 紹介文・リンク・メタデータ
+- `dist/style.css`: レイアウト・レスポンシブ対応・作品別配色
+- `dist/assets/`: 作品の世界観を表すSVGイラスト、OGP画像とfavicon
+
+SCIENCE ROOMのリンクは提供画像に合わせてHTTPです。HTTPS対応後はindex.htmlの2箇所を変更してください。
+
+
+## Apacheでのキャッシュ
+
+`dist/.htaccess` をドットファイルごと配置してください。`mod_headers` と、対象ディレクトリでの `AllowOverride FileInfo`（または適切な `AllowOverrideList`）が必要です。
+
+- HTML: `no-cache`。保存を許可し、再利用時はサーバーに更新確認します。
+- CSS・JavaScript・画像・フォント: 1日キャッシュ。
+- OGP画像（`ogp.jpg`）: 1時間キャッシュ。
+
+ファイル名が固定のため `immutable` は付けていません。CSSや画像をすぐに反映したい更新では、参照URLにバージョン（例: `style.css?v=2`）を付けるか、ファイル名を変更してください。SNS事業者側の独自キャッシュはこの設定だけでは削除できません。
+
+Pythonのローカル確認サーバーは `.htaccess` を処理しません。公開後は `curl -I https://www.sackam.net/`、`curl -I https://www.sackam.net/style.css` などで `Cache-Control` を確認できます。
