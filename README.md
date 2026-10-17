@@ -16,7 +16,11 @@ http://localhost:8080/ を開きます。
 
 ## 編集
 
-- `dist/index.html`: 紹介文・リンク・メタデータ
+- `dist/index.html`: 英語版の紹介文・リンク・メタデータ
+- `dist/ja/index.html`: 日本語版（`/ja/`）
+- `dist/404.html`: 英語の404ページ
+- `dist/ja/404.html`: `/ja/` 配下用の日本語404ページ（`dist/ja/.htaccess` で設定）
+- `dist/language.js`: 日本語ブラウザ向けの言語選択通知（英語の選択はブラウザに保存）
 - `dist/style.css`: レイアウト・レスポンシブ対応・作品別配色
 - `dist/assets/`: 作品の世界観を表すSVGイラスト、OGP画像とfavicon
 

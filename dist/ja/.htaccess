@@ -1,0 +1,2 @@
+# Override the inherited English error page for /ja/ and its subdirectories.
+ErrorDocument 404 /ja/404.html
