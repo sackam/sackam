@@ -18,6 +18,8 @@ http://localhost:8080/ を開きます。
 
 - `dist/index.html`: 英語版の紹介文・リンク・メタデータ
 - `dist/ja/index.html`: 日本語版（`/ja/`）
+- `dist/sitemap.xml`: 英語版・日本語版のサイトマップ
+- `dist/robots.txt`: クローラー向け設定・サイトマップの場所
 - `dist/404.html`: 英語の404ページ
 - `dist/ja/404.html`: `/ja/` 配下用の日本語404ページ（`dist/ja/.htaccess` で設定）
 - `dist/language.js`: 日本語ブラウザ向けの言語選択通知（英語の選択はブラウザに保存）
@@ -34,6 +36,9 @@ SCIENCE ROOMのリンクは提供画像に合わせてHTTPです。HTTPS対応�
 - HTML: `no-cache`。保存を許可し、再利用時はサーバーに更新確認します。
 - CSS・JavaScript・画像・フォント: 1日キャッシュ。
 - OGP画像（`ogp.jpg`）: 1時間キャッシュ。
+- `sitemap.xml`・`robots.txt`: 1時間キャッシュ。
+
+キャッシュ期限後は `ETag`（更新時刻・ファイルサイズ）や `Last-Modified` による条件付きリクエストで、変更がなければ本文を送らず `304 Not Modified` を返せます。日本語版にも親ディレクトリのキャッシュ設定が適用されます。
 
 ファイル名が固定のため `immutable` は付けていません。CSSや画像をすぐに反映したい更新では、参照URLにバージョン（例: `style.css?v=2`）を付けるか、ファイル名を変更してください。SNS事業者側の独自キャッシュはこの設定だけでは削除できません。
 
