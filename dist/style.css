@@ -17,3 +17,27 @@
 .scroll-link svg{display:block;width:100%;height:100%}
 .top-icon{display:inline-block;width:14px;height:14px;vertical-align:middle}
 .top-icon svg{display:block;width:100%;height:100%}
+
+/* Language choice stays in document flow so it never covers page content. */
+.language-notice{background:#e7ebdd;border-bottom:1px solid var(--line)}
+.language-notice[hidden]{display:none}
+.language-notice-inner{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:16px}
+.language-notice p{font-size:13px;line-height:1.8;margin:0}
+.language-actions{display:flex;flex-wrap:wrap;gap:10px;flex-shrink:0}
+.language-actions a,.language-actions button{display:inline-block;border:1px solid var(--ink);border-radius:4px;padding:9px 13px;font:inherit;font-size:12px;cursor:pointer}
+.language-actions a{background:var(--ink);color:var(--paper)}
+.language-actions button{background:transparent;color:var(--ink)}
+.language-actions button:focus-visible{outline:3px solid #df572b;outline-offset:4px}
+@media(max-width:650px){.language-notice-inner{align-items:flex-start;flex-direction:column}.header nav{gap:14px}}
+
+/* Shared, bilingual fallback for missing URLs at any directory depth. */
+.error-page{padding-block:64px 80px;min-height:calc(100svh - 216px)}
+.error-code{font-size:clamp(100px,20vw,200px);font-weight:800;line-height:1;letter-spacing:-.06em;color:#7c866c;margin:28px 0}
+.error-code .brand-dot{font-size:.12em;margin-left:12px}
+.error-page h1{font-size:clamp(28px,5vw,44px);letter-spacing:-1px;margin:0 0 20px}
+.error-page h2{font-size:18px;margin:28px 0 12px}
+.error-page p:not(.error-code){font-size:14px;line-height:2;color:var(--muted)}
+.error-links{display:flex;flex-wrap:wrap;gap:16px 28px;margin-top:32px}
+.error-links a{padding-block:12px;border-bottom:1px solid var(--ink);font-size:14px;font-weight:700}
+.error-links span{margin-left:12px}
+@media(max-width:650px){.error-page{padding-block:40px 56px;min-height:calc(100svh - 167px)}}

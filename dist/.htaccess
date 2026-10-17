@@ -1,3 +1,6 @@
+# Serve the custom page while preserving the HTTP 404 status.
+ErrorDocument 404 /404.html
+
 # Static-site browser caching (requires mod_headers and AllowOverride FileInfo).
 <IfModule mod_headers.c>
     # Keep HTML cached, but revalidate before every reuse.
