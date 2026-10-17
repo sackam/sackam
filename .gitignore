@@ -1,0 +1,16 @@
+# macOS metadata
+.DS_Store
+._*
+
+# Local editor settings
+.vscode/
+.idea/
+*.code-workspace
+
+# Local environment and SSH credentials
+.env
+.env.*
+!.env.example
+.ssh/
+*.pem
+*.key

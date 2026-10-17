@@ -1,0 +1,31 @@
+name: Deploy to Sakura
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sakura-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment: "Deploy production"
+    if: github.ref == 'refs/heads/master'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Upload dist to Sakura
+        env:
+          SAKURA_HOST: ${{ secrets.SAKURA_HOST }}
+          SAKURA_USER: ${{ secrets.SAKURA_USER }}
+          SAKURA_PORT: ${{ vars.SAKURA_PORT }}
+          SAKURA_PUBLIC_DIR: ${{ vars.SAKURA_PUBLIC_DIR }}
+          SAKURA_KNOWN_HOSTS: ${{ secrets.SAKURA_KNOWN_HOSTS }}
+          SAKURA_SSH_KEY: ${{ secrets.SAKURA_SSH_KEY }}
+        run: bash scripts/deploy-sakura.sh
