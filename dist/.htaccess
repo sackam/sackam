@@ -1,6 +1,9 @@
 # Serve the custom page while preserving the HTTP 404 status.
 ErrorDocument 404 /404.html
 
+# Use stable validators so unchanged files can return 304 after cache expiry.
+FileETag MTime Size
+
 # Static-site browser caching (requires mod_headers and AllowOverride FileInfo).
 <IfModule mod_headers.c>
     # Keep HTML cached, but revalidate before every reuse.
@@ -11,6 +14,11 @@ ErrorDocument 404 /404.html
     # Filenames are not content-hashed, so keep asset caching short.
     <FilesMatch "(?i)\.(css|js|mjs|svg|webp|png|jpe?g|gif|ico|avif|woff2?|ttf|otf)$">
         Header set Cache-Control "public, max-age=86400, must-revalidate"
+    </FilesMatch>
+
+    # Cache crawler metadata briefly so updates remain discoverable.
+    <FilesMatch "^(sitemap\.xml|robots\.txt)$">
+        Header set Cache-Control "public, max-age=3600, must-revalidate"
     </FilesMatch>
 
     # Allow shared-link previews to pick up the social image sooner.
