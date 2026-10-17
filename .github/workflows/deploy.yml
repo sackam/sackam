@@ -14,7 +14,7 @@ concurrency:
 
 jobs:
   deploy:
-    environment: "Deploy production"
+    environment: "sakura deploy"
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
