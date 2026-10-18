@@ -20,6 +20,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+      - name: Generate static pages
+        run: python3 scripts/build.py
       - name: Upload dist to Sakura
         env:
           SAKURA_HOST: ${{ secrets.SAKURA_HOST }}
