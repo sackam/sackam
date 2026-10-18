@@ -2,6 +2,7 @@
 set -euo pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")/.."
+python3 scripts/build.py --check
 for name in SAKURA_HOST SAKURA_USER SAKURA_PUBLIC_DIR SAKURA_KNOWN_HOSTS SAKURA_SSH_KEY; do
   if [[ -z "${!name:-}" ]]; then
     printf 'Required environment variable is missing: %s\n' "$name" >&2
