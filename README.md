@@ -4,7 +4,40 @@ www.sackam.net 用の静的ポートフォリオ。公開ディレクトリは `
 
 ## 公開
 
-Webサーバーのドキュメントルートをこのプロジェクトの `dist/` に指定します。生成済みHTMLも管理するため、そのまま公開できます。パッケージのインストールは不要です。GitHub Actionsでの公開時はHTMLを自動生成します。
+Cloudflare Pagesの `sackam` プロジェクトに、`dist/` からApache用の設定とmacOSのメタデータを除いたファイルをアップロードします。HTML生成にパッケージのインストールは不要です。
+
+- 公開URL: https://www.sackam.net/
+- Pages URL: https://sackam.pages.dev/
+- 本番ブランチ名: `master`
+
+Cloudflareにログイン済みの環境で、次のコマンドを実行します。未ログインの場合は先に `npx wrangler login` を実行してください。
+
+```sh
+python3 scripts/prepare-pages.py
+python3 scripts/build.py --check
+npx wrangler pages deploy --project-name sackam --branch master
+```
+
+`--branch master` は本番公開を指定します。実行時のローカルファイルが公開されるため、作業ブランチ上でも内容を確認してから実行してください。
+
+公開用のファイルは `.wrangler/pages/` に生成します。`dist/_headers` でHTML・アセットのキャッシュを設定します。Pagesは階層内の `404.html` を自動的に使うため、`/ja/` 配下では日本語の404ページが表示されます。Apache用の `.htaccess` はPagesにはアップロードしません。
+
+カスタムドメインはPagesに `www.sackam.net` を登録し、Cloudflare DNSの `www` を `sackam.pages.dev` へのCNAME（プロキシ済み、TTL自動）に設定します。切り替え前は `sackam.net` へのCNAMEでした。
+
+### GitHubからの自動公開
+
+`.github/workflows/deploy.yml` は `master` へのpushでHTMLを生成し、Cloudflare Pagesの `sackam` に本番公開します。Actionsの `Deploy to Cloudflare Pages` から、ブランチに `master` を選んで手動実行することもできます。`develop` など他のブランチでは公開しません。
+
+GitHubリポジトリのEnvironment `cloudflare-pages` に、次の値を登録してください。デプロイ可能なブランチも `master` に制限します。
+
+| 種類 | 名前 | 値 |
+| --- | --- | --- |
+| Secret | `CLOUDFLARE_API_TOKEN` | 対象Cloudflareアカウントの `Cloudflare Pages: Edit` 権限を持つ専用APIトークン |
+| Variable | `CLOUDFLARE_ACCOUNT_ID` | `aaab763dbdb97987b61fd673c641f041` |
+
+トークンはGitHubのSecretにだけ保存し、コードに記載しません。自動公開では動作確認済みのWrangler `4.154.0` とNode.js `22` を使います。
+
+さくらサーバーへの自動アップロードは行いません。旧公開スクリプト `scripts/deploy-sakura.sh` とApache用設定は手動で戻す場合のために残しています。
 
 ## ローカル確認
 
@@ -23,7 +56,8 @@ http://localhost:8080/ を開きます。
 - `dist/sitemap.xml`: 英語版・日本語版のサイトマップ
 - `dist/robots.txt`: クローラー向け設定・サイトマップの場所
 - `src/pages/404.html`: 英語の404ページ
-- `src/pages/ja/404.html`: `/ja/` 配下用の日本語404ページ（`dist/ja/.htaccess` で設定）
+- `src/pages/ja/404.html`: `/ja/` 配下用の日本語404ページ（Pagesでは自動適用、Apacheでは `dist/ja/.htaccess` で設定）
+- `dist/_headers`: Cloudflare Pages用のキャッシュ設定
 - `dist/language.js`: 日本語ブラウザ向けの言語選択通知（英語の選択はブラウザに保存）
 - `dist/style.css`: レイアウト・レスポンシブ対応・作品別配色
 - `dist/assets/`: 作品の世界観を表すSVGイラスト、OGP画像とfavicon

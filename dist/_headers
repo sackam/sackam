@@ -1,0 +1,27 @@
+# Revalidate HTML, including custom 404 responses, before reuse.
+/*
+  Cache-Control: no-cache
+
+/style.css
+  ! Cache-Control
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/language.js
+  ! Cache-Control
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/assets/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400, must-revalidate
+
+/assets/ogp.jpg
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/sitemap.xml
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, must-revalidate
+
+/robots.txt
+  ! Cache-Control
+  Cache-Control: public, max-age=3600, must-revalidate

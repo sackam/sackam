@@ -1,4 +1,4 @@
-name: Deploy to Sakura
+name: Deploy to Cloudflare Pages
 
 on:
   push:
@@ -9,25 +9,31 @@ permissions:
   contents: read
 
 concurrency:
-  group: sakura-production
+  group: cloudflare-pages-production
   cancel-in-progress: false
 
 jobs:
   deploy:
-    environment: "sakura deploy"
+    environment:
+      name: cloudflare-pages
+      url: https://www.sackam.net/
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - name: Generate static pages
-        run: python3 scripts/build.py
-      - name: Upload dist to Sakura
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Prepare static pages
+        run: |
+          python3 scripts/prepare-pages.py
+          python3 scripts/build.py --check
+      - name: Deploy to Cloudflare Pages
         env:
-          SAKURA_HOST: ${{ secrets.SAKURA_HOST }}
-          SAKURA_USER: ${{ secrets.SAKURA_USER }}
-          SAKURA_PORT: ${{ vars.SAKURA_PORT }}
-          SAKURA_PUBLIC_DIR: ${{ vars.SAKURA_PUBLIC_DIR }}
-          SAKURA_KNOWN_HOSTS: ${{ secrets.SAKURA_KNOWN_HOSTS }}
-          SAKURA_SSH_KEY: ${{ secrets.SAKURA_SSH_KEY }}
-        run: bash scripts/deploy-sakura.sh
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          : "${CLOUDFLARE_API_TOKEN:?Set the CLOUDFLARE_API_TOKEN environment secret}"
+          : "${CLOUDFLARE_ACCOUNT_ID:?Set the CLOUDFLARE_ACCOUNT_ID environment variable}"
+          npx --yes wrangler@4.154.0 pages deploy --project-name sackam --branch master
