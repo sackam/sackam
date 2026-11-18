@@ -30,10 +30,12 @@ def main():
             "home": home,
             "home_label": "SACKAM WORKS トップ" if japanese else "SACKAM WORKS home",
             "nav_label": "メインナビゲーション" if japanese else "Main navigation",
+            "works_label": "作品" if japanese else "Works",
+            "about_label": "つくっている人" if japanese else "About",
+            "top_label": "ページの先頭へ" if japanese else "Back to top",
+            "english_state": "" if japanese else 'aria-current="true"',
+            "japanese_state": 'aria-current="true"' if japanese else "",
             "section_base": "" if relative.name == "index.html" else home,
-            "other_home": "/" if japanese else "/ja/",
-            "other_lang": "en" if japanese else "ja",
-            "other_label": "English" if japanese else "日本語",
         }
         components = {name: render(template, values) for name, template in partials.items()}
         page = render(source.read_text(encoding="utf-8"), components)
